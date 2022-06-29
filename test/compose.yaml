@@ -1,0 +1,8 @@
+services:
+  app:
+    build: ../
+    image: algolia:${TAG}
+    ports:
+        - '13000:3000'
+        - '13001:3001'
+    restart: 'no'
