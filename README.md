@@ -13,6 +13,12 @@ The following software is required to run the pipeline:
 1. Commit your changes
 1. Run the [pipeline](pipeline.sh) manually from unix shell console
     >```./pipeline.sh```
+1. Check application on
+    >[http://localhost:3000](http://localhost:3000)
+
+    >[http://localhost:3001](http://localhost:3001)  
+    > user: admin  
+    > pass: admin
 
 ## Pipeline
 ---
@@ -20,7 +26,7 @@ The pipeline is controlled by [pipeline.sh](pipeline.sh) file.
 Actions:
 - Run [test docker-compose](test/compose.yaml) to build and deploy on testing.
 - Check if container is responding correctly.
-- Once the check passes, a backup of `algolia:latest` image to `algolia:rollback` is created.
+- Once the check passes, a backup of `algolia:latest` image to `algolia:rollback` is created for fast rollback just in case.
 - Docker image `algolia:$GIT_COMMIT` is promoted to `algolia:latest`.
 - Run [prod docker-compose](prod/compose.yaml) or [docker_udpate](docker_update.sh) to deploy/update in production.
 
@@ -46,3 +52,10 @@ The reason for this authentication is that port 3001 content looks like an admin
 Reasons for using docker compose in this practice:
 - A way to test locally is required. Docker is easy to run on any environment and architecture.
 - Time limitation for building more complex environments and possible issues when configuring on testing env.
+
+## What would I ideally do?
+---
+The best scenario in my mind would be a webhook to run the pipeline (Github actions, Gitlab CI/CD, Argo Workflows...) automatically with every commit.  
+Environment wise I would like to use kubernetes clusters (test / prod) static or dynamically created.  
+One option for local development is k3d but I have not yet experience with it and there's a time limitation.  
+For deployment I would use ArgoCD as it keeps synchronization for whatever is in the Git repository avoiding manual changes on the cluster.
